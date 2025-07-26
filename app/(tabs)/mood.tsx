@@ -54,8 +54,8 @@ export default function MoodScreen() {
       const today = new Date().toISOString().split('T')[0];
       const todayEntries = await blink.db.moodEntries.list({
         where: { 
-          userId: user.id,
-          createdAt: today
+          user_id: user.id,
+          created_at: today
         },
         limit: 1
       });
@@ -67,8 +67,8 @@ export default function MoodScreen() {
 
       // Load recent mood entries
       const entries = await blink.db.moodEntries.list({
-        where: { userId: user.id },
-        orderBy: { createdAt: 'desc' },
+        where: { user_id: user.id },
+        orderBy: { created_at: 'desc' },
         limit: 7
       });
       
@@ -88,8 +88,8 @@ export default function MoodScreen() {
       // Check if entry exists for today
       const existingEntries = await blink.db.moodEntries.list({
         where: { 
-          userId: user.id,
-          createdAt: today
+          user_id: user.id,
+          created_at: today
         },
         limit: 1
       });
@@ -103,10 +103,10 @@ export default function MoodScreen() {
       } else {
         // Create new entry
         await blink.db.moodEntries.create({
-          userId: user.id,
+          user_id: user.id,
           mood: selectedMood,
           note: moodNote.trim() || null,
-          createdAt: today,
+          created_at: today,
         });
       }
 
@@ -267,7 +267,7 @@ export default function MoodScreen() {
                       {getMoodLabel(entry.mood)}
                     </Text>
                     <Text style={styles.entryDate}>
-                      {formatDate(entry.createdAt)}
+                      {formatDate(entry.created_at || entry.createdAt)}
                     </Text>
                   </View>
                 </View>

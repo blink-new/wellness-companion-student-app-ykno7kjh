@@ -71,10 +71,10 @@ export default function JourneyScreen() {
       // Load active journeys
       const journeys = await blink.db.wellnessJourneys.list({
         where: { 
-          userId: user?.id,
-          isCompleted: "0"
+          user_id: user?.id,
+          is_completed: "0"
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { created_at: 'desc' },
         limit: 10
       });
       setActiveJourneys(journeys);
@@ -82,10 +82,10 @@ export default function JourneyScreen() {
       // Load AI insights
       const insights = await blink.db.aiInsights.list({
         where: { 
-          userId: user?.id,
-          isRead: "0"
+          user_id: user?.id,
+          is_read: "0"
         },
-        orderBy: { createdAt: 'desc' },
+        orderBy: { created_at: 'desc' },
         limit: 5
       });
       setAIInsights(insights);
@@ -101,8 +101,8 @@ export default function JourneyScreen() {
     try {
       // Get user's recent mood data for personalization
       const recentMoods = await blink.db.moodEntries.list({
-        where: { userId: user?.id },
-        orderBy: { createdAt: 'desc' },
+        where: { user_id: user?.id },
+        orderBy: { created_at: 'desc' },
         limit: 7
       });
 
@@ -195,17 +195,17 @@ export default function JourneyScreen() {
       // Save journey to database
       await blink.db.wellnessJourneys.create({
         id: journey.id,
-        userId: user?.id || '',
+        user_id: user?.id || '',
         title: journey.title,
         description: journey.description,
         category: journey.category,
-        difficultyLevel: journey.difficultyLevel,
-        estimatedDuration: journey.estimatedDuration,
-        aiRecommended: journey.aiRecommended,
+        difficulty_level: journey.difficultyLevel,
+        estimated_duration: journey.estimatedDuration,
+        ai_recommended: journey.aiRecommended ? "1" : "0",
         progress: 0,
-        isCompleted: false,
-        createdAt: new Date().toISOString().split('T')[0],
-        updatedAt: new Date().toISOString().split('T')[0]
+        is_completed: "0",
+        created_at: new Date().toISOString().split('T')[0],
+        updated_at: new Date().toISOString().split('T')[0]
       });
 
       Alert.alert(

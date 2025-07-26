@@ -89,22 +89,22 @@ export default function AnalyticsScreen() {
     try {
       // Load mood entries for trends
       const moodEntries = await blink.db.moodEntries.list({
-        where: { userId: user?.id },
-        orderBy: { createdAt: 'desc' },
+        where: { user_id: user?.id },
+        orderBy: { created_at: 'desc' },
         limit: 30
       });
 
       // Load exercise sessions
       const sessions = await blink.db.exerciseSessions.list({
-        where: { userId: user?.id },
-        orderBy: { createdAt: 'desc' },
+        where: { user_id: user?.id },
+        orderBy: { created_at: 'desc' },
         limit: 50
       });
 
       // Load academic events for stress analysis
       const academicEvents = await blink.db.academicEvents.list({
-        where: { userId: user?.id },
-        orderBy: { startDate: 'desc' },
+        where: { user_id: user?.id },
+        orderBy: { start_date: 'desc' },
         limit: 20
       });
 
@@ -122,7 +122,7 @@ export default function AnalyticsScreen() {
   const processAnalyticsData = async (moodEntries: any[], sessions: any[], academicEvents: any[]): Promise<AnalyticsData> => {
     // Process mood trends
     const moodTrends = moodEntries.map(entry => ({
-      date: entry.createdAt,
+      date: entry.created_at || entry.createdAt,
       mood: entry.mood,
       note: entry.note
     })).reverse();
@@ -147,7 +147,7 @@ export default function AnalyticsScreen() {
       checkDate.setDate(today.getDate() - i);
       const dateString = checkDate.toISOString().split('T')[0];
       
-      const hasEntry = moodEntries.some(entry => entry.createdAt === dateString);
+      const hasEntry = moodEntries.some(entry => (entry.created_at || entry.createdAt) === dateString);
       if (hasEntry) {
         streakDays++;
       } else {
@@ -158,11 +158,11 @@ export default function AnalyticsScreen() {
     // Analyze stress patterns
     const stressPatterns: { [key: string]: number } = {};
     academicEvents.forEach(event => {
-      const eventType = event.eventType;
+      const eventType = event.event_type || event.eventType;
       if (!stressPatterns[eventType]) {
         stressPatterns[eventType] = 0;
       }
-      stressPatterns[eventType] += event.stressLevel;
+      stressPatterns[eventType] += event.stress_level || event.stressLevel || 1;
     });
 
     // Calculate improvement score
@@ -209,14 +209,14 @@ export default function AnalyticsScreen() {
 
       // Save AI insight
       await blink.db.aiInsights.create({
-        userId: user?.id || '',
-        insightType: 'analytics_summary',
+        user_id: user?.id || '',
+        insight_type: 'analytics_summary',
         title: 'Your Wellness Analytics Summary',
         description: text,
-        confidenceScore: 0.85,
-        actionSuggested: 'Review your patterns and set new goals',
-        isRead: false,
-        createdAt: new Date().toISOString().split('T')[0]
+        confidence_score: 0.85,
+        action_suggested: 'Review your patterns and set new goals',
+        is_read: "0",
+        created_at: new Date().toISOString().split('T')[0]
       });
     } catch (error) {
       console.error('Error generating AI insights:', error);

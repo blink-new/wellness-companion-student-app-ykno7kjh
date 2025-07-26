@@ -85,15 +85,15 @@ export default function ExercisesScreen() {
     try {
       // Load guided exercises
       const guidedExercises = await blink.db.guidedExercises.list({
-        orderBy: { createdAt: 'desc' },
+        orderBy: { created_at: 'desc' },
         limit: 20
       });
       setExercises(guidedExercises);
 
       // Load user's exercise sessions
       const userSessions = await blink.db.exerciseSessions.list({
-        where: { userId: user?.id },
-        orderBy: { createdAt: 'desc' },
+        where: { user_id: user?.id },
+        orderBy: { created_at: 'desc' },
         limit: 10
       });
       setSessions(userSessions);
@@ -151,11 +151,11 @@ export default function ExercisesScreen() {
     try {
       // Save exercise session
       await blink.db.exerciseSessions.create({
-        userId: user.id,
-        exerciseId: currentExercise.id,
-        durationCompleted: currentExercise.duration,
-        completionPercentage: 100,
-        createdAt: new Date().toISOString().split('T')[0]
+        user_id: user.id,
+        exercise_id: currentExercise.id,
+        duration_completed: currentExercise.duration,
+        completion_percentage: 100,
+        created_at: new Date().toISOString().split('T')[0]
       });
 
       // Generate AI feedback
@@ -237,11 +237,11 @@ export default function ExercisesScreen() {
   };
 
   const getCompletedCount = () => {
-    return sessions.filter(session => session.completionPercentage === 100).length;
+    return sessions.filter(session => (session.completion_percentage || session.completionPercentage) === 100).length;
   };
 
   const getTotalMinutes = () => {
-    return sessions.reduce((total, session) => total + session.durationCompleted, 0);
+    return sessions.reduce((total, session) => total + (session.duration_completed || session.durationCompleted || 0), 0);
   };
 
   if (loading) {
@@ -388,7 +388,7 @@ export default function ExercisesScreen() {
             <Text style={styles.sectionTitle}>Recent Sessions</Text>
             
             {sessions.slice(0, 3).map((session, index) => {
-              const exercise = exercises.find(ex => ex.id === session.exerciseId);
+              const exercise = exercises.find(ex => ex.id === (session.exercise_id || session.exerciseId));
               if (!exercise) return null;
               
               return (
@@ -403,12 +403,12 @@ export default function ExercisesScreen() {
                       <View style={styles.sessionDetails}>
                         <Text style={styles.sessionTitle}>{exercise.title}</Text>
                         <Text style={styles.sessionDate}>
-                          {new Date(session.createdAt).toLocaleDateString()}
+                          {new Date(session.created_at || session.createdAt).toLocaleDateString()}
                         </Text>
                       </View>
                     </View>
                     <Text style={styles.sessionDuration}>
-                      {session.durationCompleted} min
+                      {session.duration_completed || session.durationCompleted} min
                     </Text>
                   </View>
                 </Animated.View>

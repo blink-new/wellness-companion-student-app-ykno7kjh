@@ -2,8 +2,9 @@ import { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Alert } from 'react-native';
 import { createClient } from '@blinkdotnew/sdk';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Heart, Calendar, Target, Award, AlertCircle } from 'lucide-react-native';
+import { Heart, Calendar, Target, Award, AlertCircle, Sparkles, TrendingUp, BookOpen } from 'lucide-react-native';
 import Animated, { FadeInDown } from 'react-native-reanimated';
+import { router } from 'expo-router';
 
 const blink = createClient({
   projectId: 'wellness-companion-student-app-ykno7kjh',
@@ -52,8 +53,8 @@ export default function HomeScreen() {
       const today = new Date().toISOString().split('T')[0];
       const moodEntries = await blink.db.moodEntries.list({
         where: { 
-          userId: user.id,
-          createdAt: today
+          user_id: user.id,
+          created_at: today
         },
         limit: 1
       });
@@ -198,24 +199,52 @@ export default function HomeScreen() {
         </View>
         
         <View style={styles.quickActions}>
-          <TouchableOpacity style={styles.actionCard}>
-            <Text style={styles.actionIcon}>🧘</Text>
-            <Text style={styles.actionTitle}>5-Min Meditation</Text>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/journey')}
+          >
+            <Sparkles color="#6366F1" size={24} />
+            <Text style={styles.actionTitle}>AI Journey</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
-            <Text style={styles.actionIcon}>📚</Text>
-            <Text style={styles.actionTitle}>Study Break</Text>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/calendar')}
+          >
+            <Calendar color="#8B5CF6" size={24} />
+            <Text style={styles.actionTitle}>Calendar</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
-            <Text style={styles.actionIcon}>💬</Text>
-            <Text style={styles.actionTitle}>Join Discussion</Text>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/analytics')}
+          >
+            <TrendingUp color="#10B981" size={24} />
+            <Text style={styles.actionTitle}>Analytics</Text>
           </TouchableOpacity>
           
-          <TouchableOpacity style={styles.actionCard}>
-            <Text style={styles.actionIcon}>📖</Text>
-            <Text style={styles.actionTitle}>Read Article</Text>
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/resources')}
+          >
+            <BookOpen color="#F59E0B" size={24} />
+            <Text style={styles.actionTitle}>Resources</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/badges')}
+          >
+            <Award color="#EC4899" size={24} />
+            <Text style={styles.actionTitle}>Badges</Text>
+          </TouchableOpacity>
+          
+          <TouchableOpacity 
+            style={styles.actionCard}
+            onPress={() => router.push('/emergency')}
+          >
+            <AlertCircle color="#EF4444" size={24} />
+            <Text style={styles.actionTitle}>Emergency</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -407,15 +436,12 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 2,
   },
-  actionIcon: {
-    fontSize: 32,
-    marginBottom: 8,
-  },
   actionTitle: {
     fontSize: 14,
     fontWeight: '600',
     color: '#1F2937',
     textAlign: 'center',
+    marginTop: 8,
   },
   companionCard: {
     backgroundColor: '#F0F9FF',

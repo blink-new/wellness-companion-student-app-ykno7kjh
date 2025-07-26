@@ -3,14 +3,8 @@ import {
   Heart, 
   Home, 
   Users, 
-  BookOpen, 
-  Settings,
-  Sparkles,
-  Calendar,
-  Brain,
-  TrendingUp,
-  AlertTriangle,
-  Award
+  Brain, 
+  Settings
 } from 'lucide-react-native';
 
 export default function TabLayout() {
@@ -29,7 +23,7 @@ export default function TabLayout() {
           height: 80,
         },
         tabBarLabelStyle: {
-          fontSize: 10,
+          fontSize: 12,
           fontWeight: '500',
           marginTop: 4,
         },
@@ -40,7 +34,7 @@ export default function TabLayout() {
         options={{
           title: 'Home',
           tabBarIcon: ({ color, size }) => (
-            <Home color={color} size={size - 2} />
+            <Home color={color} size={size} />
           ),
         }}
       />
@@ -49,25 +43,7 @@ export default function TabLayout() {
         options={{
           title: 'Mood',
           tabBarIcon: ({ color, size }) => (
-            <Heart color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="journey"
-        options={{
-          title: 'Journey',
-          tabBarIcon: ({ color, size }) => (
-            <Sparkles color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="calendar"
-        options={{
-          title: 'Calendar',
-          tabBarIcon: ({ color, size }) => (
-            <Calendar color={color} size={size - 2} />
+            <Heart color={color} size={size} />
           ),
         }}
       />
@@ -76,34 +52,7 @@ export default function TabLayout() {
         options={{
           title: 'Exercises',
           tabBarIcon: ({ color, size }) => (
-            <Brain color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="analytics"
-        options={{
-          title: 'Analytics',
-          tabBarIcon: ({ color, size }) => (
-            <TrendingUp color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="emergency"
-        options={{
-          title: 'Emergency',
-          tabBarIcon: ({ color, size }) => (
-            <AlertTriangle color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="badges"
-        options={{
-          title: 'Badges',
-          tabBarIcon: ({ color, size }) => (
-            <Award color={color} size={size - 2} />
+            <Brain color={color} size={size} />
           ),
         }}
       />
@@ -112,16 +61,7 @@ export default function TabLayout() {
         options={{
           title: 'Community',
           tabBarIcon: ({ color, size }) => (
-            <Users color={color} size={size - 2} />
-          ),
-        }}
-      />
-      <Tabs.Screen
-        name="resources"
-        options={{
-          title: 'Resources',
-          tabBarIcon: ({ color, size }) => (
-            <BookOpen color={color} size={size - 2} />
+            <Users color={color} size={size} />
           ),
         }}
       />
@@ -130,8 +70,46 @@ export default function TabLayout() {
         options={{
           title: 'Profile',
           tabBarIcon: ({ color, size }) => (
-            <Settings color={color} size={size - 2} />
+            <Settings color={color} size={size} />
           ),
+        }}
+      />
+      
+      {/* Hidden screens - accessible through navigation but not in tab bar */}
+      <Tabs.Screen
+        name="journey"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="calendar"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="analytics"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="emergency"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="badges"
+        options={{
+          href: null, // Hide from tab bar
+        }}
+      />
+      <Tabs.Screen
+        name="resources"
+        options={{
+          href: null, // Hide from tab bar
         }}
       />
     </Tabs>
